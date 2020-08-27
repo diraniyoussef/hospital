@@ -30,7 +30,7 @@ import org.xml.sax.SAXException;
 public class LocalDataBaseConnection {
     
     static HashMap<Integer, String> accounts = new HashMap<>();
-     
+    
     //static final String JDBC_Driver="oracle.jdbc.driver.OracleDriver";
     static final String JDBC_Driver="com.mysql.jdbc.Driver";
     //static final String DB_URL="jdbc:oracle:thin:@localhost:1522:ORCL";
