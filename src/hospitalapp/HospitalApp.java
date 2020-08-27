@@ -19,6 +19,7 @@ public class HospitalApp {
     public static void main(String[] args) throws SQLException {
         
         // TODO code application logic here
+        
         LocalDataBaseConnection.connectToLocalDB();
         LocalDataBaseConnection.populateAccountsHashMap();
         new Login().setVisible(true);
