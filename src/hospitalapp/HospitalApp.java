@@ -1,0 +1,27 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package hospitalapp;
+
+import java.sql.SQLException;
+
+/**
+ *
+ * @author patri
+ */
+public class HospitalApp {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) throws SQLException {
+        // TODO code application logic here
+        LocalDataBaseConnection.connectToLocalDB();
+        LocalDataBaseConnection.populateAccountsHashMap();
+        new Login().setVisible(true);
+        
+    }
+    
+}
