@@ -160,7 +160,13 @@ public class Login extends javax.swing.JFrame {
             
            id=Integer.parseInt(idTextField.getText());
             password=passWord.getText();
-            
+            if(!password.equals(LocalDataBaseConnection.adminPass)){
+        try {
+            LocalDataBaseConnection.hashingPass();
+        } catch (Exception ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       }
             if(!LocalDataBaseConnection.verifyAccount()){
             final JDialog dialog = new JDialog();
            dialog.setAlwaysOnTop(true);
@@ -195,7 +201,7 @@ public class Login extends javax.swing.JFrame {
                          
                    }
             }
-        
+        setVisible(false);
             
     }//GEN-LAST:event_LoginButtonActionPerformed
 
@@ -221,8 +227,9 @@ public class Login extends javax.swing.JFrame {
            dialog.setAlwaysOnTop(true);
             JOptionPane.showMessageDialog(dialog,"Please choose an ID greater than:"
                                                  +Collections.max(LocalDataBaseConnection.accounts.keySet()));
+            setVisible(false);
             new CreateAccount().setVisible(true);
-            
+            Person.populateCodeList();
     }//GEN-LAST:event_newAccButtonActionPerformed
 
     /**
@@ -250,6 +257,7 @@ public class Login extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
