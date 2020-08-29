@@ -165,6 +165,7 @@ public class DoctorInfos_Frame extends javax.swing.JFrame {
                 new DoctorInfos_Frame().setVisible(true);
             }
         });
+       
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
