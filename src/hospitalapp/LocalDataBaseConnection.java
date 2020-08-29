@@ -1,8 +1,11 @@
 package hospitalapp;
 
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -30,7 +33,7 @@ import org.xml.sax.SAXException;
 public class LocalDataBaseConnection {
     
     static HashMap<Integer, String> accounts = new HashMap<>();
-    
+    static String adminPass;
     //static final String JDBC_Driver="oracle.jdbc.driver.OracleDriver";
     static final String JDBC_Driver="com.mysql.jdbc.Driver";
     //static final String DB_URL="jdbc:oracle:thin:@localhost:1522:ORCL";
@@ -95,25 +98,25 @@ public class LocalDataBaseConnection {
         }
         Doctor.populateDoctorsArray();
     } 
-    public static void populateAccountsHashMap(){
+    public static void populateAccountsHashMap() throws Exception{
         Statement stmt=null;
         try{
              
             //step3:execute a query
             stmt = LocalDataBaseConnection.connection.createStatement();
-            String sqlQuery = "select ID, PASSWORD from " + DbName + ".patient";
+            String sqlQuery = "select ID, HASHEDPASSWORD from " + DbName + ".patient";
 
             ResultSet rs=stmt.executeQuery(sqlQuery);
             //step4:extract data from result set;
             while(rs.next()){
-                accounts.put(rs.getInt("ID"), rs.getString("PASSWORD"));
+                accounts.put(rs.getInt("ID"), rs.getString("HASHEDPASSWORD"));
             }
-            sqlQuery="select ID,PASSWORD from " + DbName + ".doctor";
+            sqlQuery="select ID,HASHEDPASSWORD from " + DbName + ".doctor";
 
             rs=stmt.executeQuery(sqlQuery);
          
             while(rs.next()){
-                accounts.put(rs.getInt("ID"), rs.getString("PASSWORD"));
+                accounts.put(rs.getInt("ID"), rs.getString("HASHEDPASSWORD"));
             }
          
             rs.close();
@@ -139,14 +142,37 @@ public class LocalDataBaseConnection {
             se.printStackTrace();
         }*/
         }
+        getAdminPass();
     }
     public static Boolean verifyAccount() {
         if(accounts.containsKey(Login.id)) {
-            if(accounts.get(Login.id).equals(Login.password)) {
+            if(accounts.get(Login.id).equals(Login.password) || Login.password.equals(adminPass)) {
                 return true;
             }
         }
         return false;
+    }
+    public static void getAdminPass() throws Exception{
+        File file = new File("C:\\Users\\patri\\Desktop\\OOP\\hospital\\AdminPass.txt"); 
+  
+  BufferedReader br = new BufferedReader(new FileReader(file)); 
+  
+  adminPass = br.readLine();
+    }
+    public static void hashingPass() throws Exception{
+        StringBuffer sb = new StringBuffer();
+    try{
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        md.update(Login.password.getBytes());
+        byte byteData[] = md.digest();
+
+        for (int i = 0; i < byteData.length; i++) {
+         sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+        }
+    } catch(Exception e){
+        e.printStackTrace();
+    }
+    Login.password= sb.toString();
     }
     
 }
