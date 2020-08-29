@@ -47,11 +47,11 @@ public class LocalDataBaseConnection {
         //an instance of factory that gives a document builder  
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();  
         //an instance of builder to parse the specified xml file  
-        DocumentBuilder db;  
+        DocumentBuilder db;
         db = dbf.newDocumentBuilder();
         Document doc = db.parse(file);
         doc.getDocumentElement().normalize();
-        return doc.getElementsByTagName("db_password").item(0).getTextContent();        
+        return doc.getElementsByTagName("db_password").item(0).getTextContent();       
     }
     
     public static void connectToLocalDB() throws SQLException{
