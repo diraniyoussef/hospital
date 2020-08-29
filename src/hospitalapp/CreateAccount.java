@@ -12,8 +12,10 @@ import java.sql.Statement;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 
 /**
  *
@@ -24,12 +26,37 @@ public class CreateAccount extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
+    static String code;
     
     public CreateAccount() {
         initComponents();
         setLocationRelativeTo(null);
-    }
+       this.bindData();
 
+    }
+DefaultListModel defaultListModel=new DefaultListModel();
+   private void bindData(){
+       //foreach with functinal operation
+        Person.country2phone.stream().forEach((Contact) -> {
+            defaultListModel.addElement(Contact);
+        });
+        codeList.setModel(defaultListModel);
+        codeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+   }
+   private void searchFilter(String searchTerm)
+    {
+        DefaultListModel filteredItems=new DefaultListModel();
+
+        Person.country2phone.stream().forEach((Contact) -> {
+            String starName=Contact.toString().toLowerCase();
+            if (starName.contains(searchTerm.toLowerCase())) {
+                filteredItems.addElement(Contact);
+            }
+        });
+        defaultListModel=filteredItems;
+        codeList.setModel(defaultListModel);
+
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -52,9 +79,14 @@ public class CreateAccount extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         nameTextField = new javax.swing.JTextField();
-        bloodTypeTextField = new javax.swing.JTextField();
-        phoneNbTextField = new javax.swing.JTextField();
+        searchTextField = new javax.swing.JTextField();
         familyNameTextField = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        phoneNbTextField = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        codeList = new javax.swing.JList<>();
+        jLabel9 = new javax.swing.JLabel();
+        bloodTypeTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -111,7 +143,31 @@ public class CreateAccount extends javax.swing.JFrame {
         jLabel6.setText("Blood Type:");
 
         jLabel7.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabel7.setText("Phone Nb:");
+        jLabel7.setText("Code:");
+
+        searchTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchTextFieldActionPerformed(evt);
+            }
+        });
+        searchTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchTextFieldKeyReleased(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel8.setText("Phone Nb:");
+
+        codeList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                codeListMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(codeList);
+
+        jLabel9.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel9.setText("Search  For Code:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -121,32 +177,33 @@ public class CreateAccount extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(ClearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(createButton, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ClearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(passWord, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel8))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(familyNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(idTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(bloodTypeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(phoneNbTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                    .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(passWord, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(bloodTypeTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(phoneNbTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(createButton, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -169,17 +226,27 @@ public class CreateAccount extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(bloodTypeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(bloodTypeTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(phoneNbTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel9)
+                    .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(passWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(phoneNbTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(passWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ClearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(createButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -193,7 +260,7 @@ public class CreateAccount extends javax.swing.JFrame {
             
             Patient patient=new Patient();
             if(idTextField.getText().isEmpty() || nameTextField.getText().isEmpty() 
-            || familyNameTextField.getText().isEmpty() || bloodTypeTextField.getText().isEmpty() 
+            || familyNameTextField.getText().isEmpty() || searchTextField.getText().isEmpty() 
             || phoneNbTextField.getText().isEmpty() || passWord.getText().isEmpty())  {
             final JDialog dialog = new JDialog();
             dialog.setAlwaysOnTop(true);
@@ -203,8 +270,8 @@ public class CreateAccount extends javax.swing.JFrame {
             patient.setId(Integer.parseInt(idTextField.getText()));
             patient.setName(nameTextField.getText());
             patient.setFamilyName(familyNameTextField.getText());
-            patient.setBloodType(bloodTypeTextField.getText());
-            patient.setPhoneNb(Long.parseLong(phoneNbTextField.getText()));
+            patient.setBloodType(searchTextField.getText());
+            patient.setPhoneNb("("+code+") "+phoneNbTextField.getText());
             patient.setPassword(passWord.getText());
             if(patient.getId()<Collections.max(LocalDataBaseConnection.accounts.keySet())){
             final JDialog dialog = new JDialog();
@@ -219,11 +286,11 @@ public class CreateAccount extends javax.swing.JFrame {
              
         //step3:execute a query
                 if(!(idTextField.getText().isEmpty() || nameTextField.getText().isEmpty() 
-            || familyNameTextField.getText().isEmpty() || bloodTypeTextField.getText().isEmpty() 
+            || familyNameTextField.getText().isEmpty() || searchTextField.getText().isEmpty() 
             || phoneNbTextField.getText().isEmpty() || passWord.getText().isEmpty())) {
                     
                 stmt=LocalDataBaseConnection.connection.createStatement();
-                String sqlQuery="Insert into \"LocalDataBaseConnection.DbName\".\"patient\" "
+                String sqlQuery="Insert into " + LocalDataBaseConnection.DbName + ".patient "
                 + "(ID,NAME,FAMILYNAME,BLOODTYPE,MYROOM,PHONENB,PASSWORD) "
                 + "values (?,?,?,?,?,?,?)";
                 
@@ -233,7 +300,7 @@ public class CreateAccount extends javax.swing.JFrame {
                 pstmt.setString(3, patient.getFamilyName());
                 pstmt.setString(4, patient.getBloodType());
                 pstmt.setInt(5, 0);
-                pstmt.setLong(6, patient.getPhoneNb());
+                pstmt.setString(6, patient.getPhoneNb());
                 pstmt.setString(7, patient.getPassword());
                 pstmt.executeUpdate();
                      }
@@ -251,6 +318,7 @@ public class CreateAccount extends javax.swing.JFrame {
                             se.printStackTrace();
                           }
                  }
+                 setVisible(false);
               new PatientInfos_Frame().setVisible(true);
               patient.viewOperationInfo();
                            PatientInfos_Frame.myDoctorTextField.setText(patient.getMyDoctor());
@@ -279,6 +347,22 @@ public class CreateAccount extends javax.swing.JFrame {
         passWord.setText(null);
     }//GEN-LAST:event_ClearButtonActionPerformed
 
+    private void searchTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchTextFieldActionPerformed
+
+    private void searchTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextFieldKeyReleased
+        // TODO add your handling code here:
+      searchFilter(searchTextField.getText());
+    }//GEN-LAST:event_searchTextFieldKeyReleased
+
+    private void codeListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_codeListMouseClicked
+        // TODO add your handling code here:
+        if(codeList.getSelectedValue()!=null){
+            code=Person.getCode();
+        }
+    }//GEN-LAST:event_codeListMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -306,6 +390,8 @@ public class CreateAccount extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -317,7 +403,8 @@ public class CreateAccount extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ClearButton;
-    private javax.swing.JTextField bloodTypeTextField;
+    private javax.swing.JTextField bloodTypeTextField1;
+    static javax.swing.JList<String> codeList;
     private javax.swing.JButton createButton;
     private javax.swing.JTextField familyNameTextField;
     private javax.swing.JTextField idTextField;
@@ -329,8 +416,12 @@ public class CreateAccount extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nameTextField;
     private javax.swing.JPasswordField passWord;
     private javax.swing.JTextField phoneNbTextField;
+    private javax.swing.JTextField searchTextField;
     // End of variables declaration//GEN-END:variables
 }
