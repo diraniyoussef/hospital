@@ -24,7 +24,7 @@ public class Patient extends Person {
     private String operationHour;
     private String operationName;
     private int myRoom;
-    private long phoneNb;
+    private String phoneNb;
     private String myDoctor;
     private String password;
 
@@ -48,7 +48,7 @@ public class Patient extends Person {
         return myRoom;
     }
 
-    public long getPhoneNb() {
+    public String getPhoneNb() {
         return phoneNb;
     }
 
@@ -80,7 +80,7 @@ public class Patient extends Person {
         this.myRoom = myRoom;
     }
 
-    public void setPhoneNb(long phoneNb) {
+    public void setPhoneNb(String phoneNb) {
         this.phoneNb = phoneNb;
     }
 
@@ -162,7 +162,7 @@ public class Patient extends Person {
     
     public Patient(int id, String name, String familyNmae, String bloodType, int idOperation,
             String appointmentHour, String operationHour, String operationName,
-            int myRoom, long phoneNb) {
+            int myRoom, String phoneNb) {
 
         super.setId(id);
         super.setName(name);
@@ -363,7 +363,7 @@ public class Patient extends Person {
                 p.setOperationHour(rs.getString("OPERATIONHOUR"));
                 p.setOperationName(rs.getString("OPERATIONNAME"));
                 p.setMyRoom(rs.getInt("MYROOM"));
-                p.setPhoneNb(rs.getInt("PHONENB"));
+                p.setPhoneNb(rs.getString("PHONENB"));
                 p.setMyDoctor(rs.getString("MYDOCTOR"));
                 p.setPassword(rs.getString("PASSWORD"));
                 patientsArray.add(p);
