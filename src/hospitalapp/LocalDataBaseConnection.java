@@ -45,16 +45,17 @@ public class LocalDataBaseConnection {
     static String password;
     static Connection connection = null;
     
-    private static String passwordFetching() throws ParserConfigurationException, SAXException, IOException {
+    private static String passwordsFetching() throws ParserConfigurationException, SAXException, IOException {
         File file = new File("./config_app.xml");
         //an instance of factory that gives a document builder  
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();  
         //an instance of builder to parse the specified xml file  
-        DocumentBuilder db;  
+        DocumentBuilder db;
         db = dbf.newDocumentBuilder();
         Document doc = db.parse(file);
         doc.getDocumentElement().normalize();
-        return doc.getElementsByTagName("db_password").item(0).getTextContent();        
+        adminPass = doc.getElementsByTagName("super_user_password").item(0).getTextContent();
+        return doc.getElementsByTagName("db_password").item(0).getTextContent();       
     }
     
     public static void connectToLocalDB() throws SQLException{
@@ -64,7 +65,7 @@ public class LocalDataBaseConnection {
             Class.forName(JDBC_Driver);
             // setp2:Open a connection
             userName="root";            
-            password=passwordFetching();
+            password=passwordsFetching();
             
             System.out.println("connecting to database...");
             connection=DriverManager.getConnection(DB_URL,userName,password);
@@ -142,7 +143,7 @@ public class LocalDataBaseConnection {
             se.printStackTrace();
         }*/
         }
-        getAdminPass();
+        //getAdminPass();
     }
     public static Boolean verifyAccount() {
         if(accounts.containsKey(Login.id)) {
@@ -152,13 +153,7 @@ public class LocalDataBaseConnection {
         }
         return false;
     }
-    public static void getAdminPass() throws Exception{
-        File file = new File("C:\\Users\\patri\\Desktop\\OOP\\hospital\\AdminPass.txt"); 
-  
-  BufferedReader br = new BufferedReader(new FileReader(file)); 
-  
-  adminPass = br.readLine();
-    }
+    
     public static void hashingPass() throws Exception{
         StringBuffer sb = new StringBuffer();
     try{

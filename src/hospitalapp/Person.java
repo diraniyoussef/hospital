@@ -145,7 +145,6 @@ public abstract class Person {
     country2phone.add("IR:+98");
     country2phone.add("IQ:+964");
     country2phone.add("IE:+353");
-    country2phone.add("IL:+972");
     country2phone.add("IT:+39");
     country2phone.add("JM:+1-876");
     country2phone.add("JP:+81");
