@@ -21,6 +21,7 @@ public class PatientInfos_Frame extends javax.swing.JFrame {
     /**
      * Creates new form PatientInfos_Frame
      */
+    
     DefaultListModel defaultListModel=new DefaultListModel();
     static String selectedProfession;
     static String selectedDoctorName;
