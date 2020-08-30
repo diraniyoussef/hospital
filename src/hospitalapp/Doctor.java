@@ -31,6 +31,7 @@ public class Doctor extends Person{
 
    // public HashMap<String, String> weeklyFreeCalendar= new HashMap<>();
     
+    
     public String getProfession() {
         return profession;
     }
