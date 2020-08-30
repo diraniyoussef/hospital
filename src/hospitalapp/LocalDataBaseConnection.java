@@ -32,7 +32,8 @@ import org.xml.sax.SAXException;
  */
 public class LocalDataBaseConnection {
     
-    static HashMap<Integer, String> accounts = new HashMap<>();
+    static HashMap<Integer, String> accountsById = new HashMap<>();
+    static HashMap<Integer, String> accountsByNb = new HashMap<>();
     static String adminPass;
     //static final String JDBC_Driver="oracle.jdbc.driver.OracleDriver";
     static final String JDBC_Driver="com.mysql.jdbc.Driver";
@@ -99,7 +100,7 @@ public class LocalDataBaseConnection {
         }
         Doctor.populateDoctorsArray();
     } 
-    public static void populateAccountsHashMap() throws Exception{
+    public static void populateAccountsByIdHashMap() throws Exception{
         Statement stmt=null;
         try{
              
@@ -110,14 +111,14 @@ public class LocalDataBaseConnection {
             ResultSet rs=stmt.executeQuery(sqlQuery);
             //step4:extract data from result set;
             while(rs.next()){
-                accounts.put(rs.getInt("ID"), rs.getString("HASHEDPASSWORD"));
+                accountsById.put(rs.getInt("ID"), rs.getString("HASHEDPASSWORD"));
             }
             sqlQuery="select ID,HASHEDPASSWORD from " + DbName + ".doctor";
 
             rs=stmt.executeQuery(sqlQuery);
          
             while(rs.next()){
-                accounts.put(rs.getInt("ID"), rs.getString("HASHEDPASSWORD"));
+                accountsById.put(rs.getInt("ID"), rs.getString("HASHEDPASSWORD"));
             }
          
             rs.close();
@@ -145,9 +146,53 @@ public class LocalDataBaseConnection {
         }
         //getAdminPass();
     }
+    public static void populateAccountsByNbHashMap() throws Exception{
+        Statement stmt=null;
+        try{
+             
+            //step3:execute a query
+            stmt = LocalDataBaseConnection.connection.createStatement();
+            String sqlQuery = "select PHONENB, HASHEDPASSWORD from " + DbName + ".patient";
+
+            ResultSet rs=stmt.executeQuery(sqlQuery);
+            //step4:extract data from result set;
+            while(rs.next()){
+                accountsById.put(rs.getInt("PHONENB"), rs.getString("HASHEDPASSWORD"));
+            }
+                     
+            rs.close();
+        }
+        catch(SQLException se){
+            se.printStackTrace();
+        }
+        finally{
+            try{
+                if(stmt!=null){
+                    stmt.close();
+                }
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }   
+            /*try{
+                if(connection!=null){
+                    connection.close();
+                }
+            }
+            catch(SQLException se){
+            se.printStackTrace();
+        }*/
+        }
+        //getAdminPass();
+    }
     public static Boolean verifyAccount() {
-        if(accounts.containsKey(Login.id)) {
-            if(accounts.get(Login.id).equals(Login.password) || Login.password.equals(adminPass)) {
+        if(accountsById.containsKey(Login.id)) {
+            if(accountsById.get(Login.id).equals(Login.password) || Login.password.equals(adminPass)) {
+                return true;
+            }
+        }
+        if(accountsByNb.containsKey(Login.id)) {
+            if(accountsByNb.get(Login.id).equals(Login.password) || Login.password.equals(adminPass)) {
                 return true;
             }
         }
