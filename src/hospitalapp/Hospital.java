@@ -12,8 +12,9 @@ import java.util.ArrayList;
  * @author patri
  */
 public class Hospital {
-    static final String hospitalName="Hotel Dieu";
-    static final ArrayList<String> phoneNumbers=new ArrayList<>();
-    static final String location="";
-    
+
+    static final String HospitalName = "Hotel Dieu";
+    static final ArrayList<String> phoneNumbers = new ArrayList<>();
+    static final String Location = "";
+
 }

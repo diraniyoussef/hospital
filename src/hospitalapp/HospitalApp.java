@@ -17,12 +17,12 @@ public class HospitalApp {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException, Exception {
-        
+
         // TODO code application logic here
         LocalDataBaseConnection.connectToLocalDB();
         LocalDataBaseConnection.populateAccountsHashMap();
         new Login().setVisible(true);
-        
+
     }
-    
+
 }
