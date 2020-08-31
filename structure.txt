@@ -1,0 +1,29 @@
+		server (Windows or Linux listening on port 11359, 11360) + mysql database server (listening on port 3306) + remote querying
+										runtime table to notify according to request - for special messaging
+
+	patient	(mobile app)		doctor (mobile app)		doctor (desktop)		admin (desktop) - need secure connection to db
+
+
+
+
+	Hospitals
+patients - doctors
+
+patient1
+patient2
+
+
+doctor1
+doctor2
+doctor3
+
+Hospital1:patient1:doctor2:mymessage
+forwarding...
+
+Hospital1:doctor2:patient1:mymessage
+forwarding...
+
+
+
+special priviledges to us ?
+
