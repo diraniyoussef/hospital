@@ -20,7 +20,8 @@ public class HospitalApp {
 
         // TODO code application logic here
         LocalDataBaseConnection.connectToLocalDB();
-        LocalDataBaseConnection.populateAccountsHashMap();
+        LocalDataBaseConnection.populateAccountsByIdHashMap();
+        LocalDataBaseConnection.populateAccountsByNbHashMap();
         new Login().setVisible(true);
 
     }

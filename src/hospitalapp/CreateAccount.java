@@ -279,7 +279,7 @@ public class CreateAccount extends javax.swing.JFrame {
             final JDialog dialog = new JDialog();
             dialog.setAlwaysOnTop(true);
             patient.setId(Integer.parseInt(JOptionPane.showInputDialog(dialog, "The ID is already taken."
-                    + "Please choose an ID greater than:" + Collections.max(LocalDataBaseConnection.accounts.keySet()))));
+                    + "Please choose an ID greater than:" + Collections.max(LocalDataBaseConnection.accounts.keySet()))));                  
             idTextField.setText(Integer.toString(patient.getId()));
         }
 
