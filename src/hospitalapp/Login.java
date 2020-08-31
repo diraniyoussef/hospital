@@ -55,7 +55,7 @@ public class Login extends javax.swing.JFrame {
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabel2.setText("ID");
+        jLabel2.setText("ID / PHONE NB:");
 
         jLabel3.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel3.setText("Password:");
@@ -109,7 +109,7 @@ public class Login extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2)
@@ -226,7 +226,7 @@ public class Login extends javax.swing.JFrame {
         final JDialog dialog = new JDialog();
            dialog.setAlwaysOnTop(true);
             JOptionPane.showMessageDialog(dialog,"Please choose an ID greater than:"
-                                                 +Collections.max(LocalDataBaseConnection.accounts.keySet()));
+                                                 +Collections.max(LocalDataBaseConnection.accountsById.keySet()));
             setVisible(false);
             new CreateAccount().setVisible(true);
             Person.populateCodeList();

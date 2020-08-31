@@ -1,9 +1,7 @@
 package hospitalapp;
 
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.sql.Connection;
@@ -12,8 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -32,7 +28,8 @@ import org.xml.sax.SAXException;
  */
 public class LocalDataBaseConnection {
     
-    static HashMap<Integer, String> accounts = new HashMap<>();
+    static HashMap<Integer, String> accountsById = new HashMap<>();
+    static HashMap<Integer, String> accountsByNb = new HashMap<>();
     static String adminPass;
     //static final String JDBC_Driver="oracle.jdbc.driver.OracleDriver";
     static final String JDBC_Driver="com.mysql.jdbc.Driver";
@@ -45,16 +42,17 @@ public class LocalDataBaseConnection {
     static String password;
     static Connection connection = null;
     
-    private static String passwordFetching() throws ParserConfigurationException, SAXException, IOException {
+    private static String passwordsFetching() throws ParserConfigurationException, SAXException, IOException {
         File file = new File("./config_app.xml");
         //an instance of factory that gives a document builder  
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();  
         //an instance of builder to parse the specified xml file  
-        DocumentBuilder db;  
+        DocumentBuilder db;
         db = dbf.newDocumentBuilder();
         Document doc = db.parse(file);
         doc.getDocumentElement().normalize();
-        return doc.getElementsByTagName("db_password").item(0).getTextContent();        
+        adminPass = doc.getElementsByTagName("super_user_password").item(0).getTextContent();
+        return doc.getElementsByTagName("db_password").item(0).getTextContent();       
     }
     
     public static void connectToLocalDB() throws SQLException{
@@ -64,7 +62,7 @@ public class LocalDataBaseConnection {
             Class.forName(JDBC_Driver);
             // setp2:Open a connection
             userName="root";            
-            password=passwordFetching();
+            password=passwordsFetching();
             
             System.out.println("connecting to database...");
             connection=DriverManager.getConnection(DB_URL,userName,password);
@@ -98,7 +96,7 @@ public class LocalDataBaseConnection {
         }
         Doctor.populateDoctorsArray();
     } 
-    public static void populateAccountsHashMap() throws Exception{
+    public static void populateAccountsByIdHashMap() throws Exception{
         Statement stmt=null;
         try{
              
@@ -109,14 +107,14 @@ public class LocalDataBaseConnection {
             ResultSet rs=stmt.executeQuery(sqlQuery);
             //step4:extract data from result set;
             while(rs.next()){
-                accounts.put(rs.getInt("ID"), rs.getString("HASHEDPASSWORD"));
+                accountsById.put(rs.getInt("ID"), rs.getString("HASHEDPASSWORD"));
             }
             sqlQuery="select ID,HASHEDPASSWORD from " + DbName + ".doctor";
 
             rs=stmt.executeQuery(sqlQuery);
          
             while(rs.next()){
-                accounts.put(rs.getInt("ID"), rs.getString("HASHEDPASSWORD"));
+                accountsById.put(rs.getInt("ID"), rs.getString("HASHEDPASSWORD"));
             }
          
             rs.close();
@@ -142,23 +140,61 @@ public class LocalDataBaseConnection {
             se.printStackTrace();
         }*/
         }
-        getAdminPass();
+        //getAdminPass();
+    }
+    public static void populateAccountsByNbHashMap() throws Exception{
+        Statement stmt=null;
+        try{
+             
+            //step3:execute a query
+            stmt = LocalDataBaseConnection.connection.createStatement();
+            String sqlQuery = "select PHONENB, HASHEDPASSWORD from " + DbName + ".patient";
+
+            ResultSet rs=stmt.executeQuery(sqlQuery);
+            //step4:extract data from result set;
+            while(rs.next()){
+                accountsById.put(rs.getInt("PHONENB"), rs.getString("HASHEDPASSWORD"));
+            }
+                     
+            rs.close();
+        }
+        catch(SQLException se){
+            se.printStackTrace();
+        }
+        finally{
+            try{
+                if(stmt!=null){
+                    stmt.close();
+                }
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }   
+            /*try{
+                if(connection!=null){
+                    connection.close();
+                }
+            }
+            catch(SQLException se){
+            se.printStackTrace();
+        }*/
+        }
+        //getAdminPass();
     }
     public static Boolean verifyAccount() {
-        if(accounts.containsKey(Login.id)) {
-            if(accounts.get(Login.id).equals(Login.password) || Login.password.equals(adminPass)) {
+        if(accountsById.containsKey(Login.id)) {
+            if(accountsById.get(Login.id).equals(Login.password) || Login.password.equals(adminPass)) {
+                return true;
+            }
+        }
+        if(accountsByNb.containsKey(Login.id)) {
+            if(accountsByNb.get(Login.id).equals(Login.password) || Login.password.equals(adminPass)) {
                 return true;
             }
         }
         return false;
     }
-    public static void getAdminPass() throws Exception{
-        File file = new File("C:\\Users\\patri\\Desktop\\OOP\\hospital\\AdminPass.txt"); 
-  
-  BufferedReader br = new BufferedReader(new FileReader(file)); 
-  
-  adminPass = br.readLine();
-    }
+    
     public static void hashingPass() throws Exception{
         StringBuffer sb = new StringBuffer();
     try{

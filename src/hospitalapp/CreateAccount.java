@@ -273,11 +273,11 @@ DefaultListModel defaultListModel=new DefaultListModel();
             patient.setBloodType(searchTextField.getText());
             patient.setPhoneNb("("+code+") "+phoneNbTextField.getText());
             patient.setPassword(passWord.getText());
-            if(patient.getId()<Collections.max(LocalDataBaseConnection.accounts.keySet())){
+            if(patient.getId()<Collections.max(LocalDataBaseConnection.accountsById.keySet())){
             final JDialog dialog = new JDialog();
            dialog.setAlwaysOnTop(true);
             patient.setId(Integer.parseInt(JOptionPane.showInputDialog(dialog,"The ID is already taken."
-                    + "Please choose an ID greater than:"+Collections.max(LocalDataBaseConnection.accounts.keySet()))));
+                    + "Please choose an ID greater than:"+Collections.max(LocalDataBaseConnection.accountsById.keySet()))));
             idTextField.setText(Integer.toString(patient.getId()));
             }
             
