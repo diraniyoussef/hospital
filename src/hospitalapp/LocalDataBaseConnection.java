@@ -29,7 +29,7 @@ import org.xml.sax.SAXException;
 public class LocalDataBaseConnection {
     
     static HashMap<Integer, String> accountsById = new HashMap<>();
-    static HashMap<Integer, String> accountsByNb = new HashMap<>();
+    static HashMap<String, String> accountsByNb = new HashMap<>();
     static String adminPass;
     //static final String JDBC_Driver="oracle.jdbc.driver.OracleDriver";
     static final String JDBC_Driver="com.mysql.jdbc.Driver";
@@ -154,7 +154,7 @@ public class LocalDataBaseConnection {
             ResultSet rs=stmt.executeQuery(sqlQuery);
             //step4:extract data from result set;
             while(rs.next()){
-                accountsByNb.put(rs.getInt("PHONENB"), rs.getString("HASHEDPASSWORD"));
+                accountsByNb.put(rs.getString("PHONENB"), rs.getString("HASHEDPASSWORD"));
             }
                      
             rs.close();
