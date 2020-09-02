@@ -142,6 +142,7 @@ public class LocalDataBaseConnection {
         }
         //getAdminPass();
     }
+    
     public static void populateAccountsByNbHashMap() throws Exception{
         Statement stmt=null;
         try{
@@ -153,7 +154,7 @@ public class LocalDataBaseConnection {
             ResultSet rs=stmt.executeQuery(sqlQuery);
             //step4:extract data from result set;
             while(rs.next()){
-                accountsById.put(rs.getInt("PHONENB"), rs.getString("HASHEDPASSWORD"));
+                accountsByNb.put(rs.getInt("PHONENB"), rs.getString("HASHEDPASSWORD"));
             }
                      
             rs.close();
