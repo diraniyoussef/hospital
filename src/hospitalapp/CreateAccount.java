@@ -270,7 +270,7 @@ DefaultListModel defaultListModel=new DefaultListModel();
             patient.setId(Integer.parseInt(idTextField.getText()));
             patient.setName(nameTextField.getText());
             patient.setFamilyName(familyNameTextField.getText());
-            patient.setBloodType(searchTextField.getText());
+            patient.setBloodType(bloodTypeTextField1.getText());
             patient.setPhoneNb("("+code+") "+phoneNbTextField.getText());
             patient.setPassword(passWord.getText());
             if(patient.getId()<Collections.max(LocalDataBaseConnection.accountsById.keySet())){
