@@ -35,7 +35,7 @@ public class LocalDataBaseConnection {
     static final String JDBC_Driver="com.mysql.jdbc.Driver";
     //static final String DB_URL="jdbc:oracle:thin:@localhost:1522:ORCL";
     static final String DbName = "hospitaldb";
-    static final String DB_URL="jdbc:mysql://localhost:3306/" + DbName + "?autoReconnect=true&useSSL=false";
+    static final String DB_URL="jdbc:mysql://localhost:3306/" + DbName + "?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true";
 
     //DataBase Credentials
     static String userName;
