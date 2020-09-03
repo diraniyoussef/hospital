@@ -21,41 +21,41 @@ public class PatientInfos_Frame extends javax.swing.JFrame {
     /**
      * Creates new form PatientInfos_Frame
      */
-    
-    DefaultListModel defaultListModel=new DefaultListModel();
+    DefaultListModel defaultListModel = new DefaultListModel();
     static String selectedProfession;
     static String selectedDoctorName;
     static String selectedAppointment;
-    int clickNb=0;
-    
+    int clickNb = 0;
+
     public PatientInfos_Frame() {
         initComponents();
         setLocationRelativeTo(null);
         this.bindData();
     }
-    
-    private void bindData(){
-       //foreach with functinal operation
+
+    private void bindData() {
+        //foreach with functinal operation
         Doctor.professionsArray.stream().forEach((profession) -> {
             defaultListModel.addElement(profession);
         });
         jList.setModel(defaultListModel);
         jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-   }
-    private void searchFilter(String searchTerm)
-    {
-        DefaultListModel filteredItems=new DefaultListModel();
+    }
+
+    private void searchFilter(String searchTerm) {
+        DefaultListModel filteredItems = new DefaultListModel();
 
         Doctor.professionsArray.stream().forEach((profession) -> {
-            String starName=profession.toString().toLowerCase();
+            String starName = profession.toString().toLowerCase();
             if (starName.contains(searchTerm.toLowerCase())) {
                 filteredItems.addElement(profession);
             }
         });
-        defaultListModel=filteredItems;
+        defaultListModel = filteredItems;
         jList.setModel(defaultListModel);
 
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -211,7 +211,7 @@ public class PatientInfos_Frame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListMouseClicked
-       
+
     }//GEN-LAST:event_jListMouseClicked
 
     private void searchForProfessionTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchForProfessionTextFieldKeyReleased
@@ -229,66 +229,64 @@ public class PatientInfos_Frame extends javax.swing.JFrame {
 
     private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
         clickNb++;
-        if(clickNb==1){
-        selectedProfession=jList.getSelectedValue();
-        try {
-            // TODO add your handling code here:
-            Doctor.populateContactList2();
-        } catch (Exception ex) {
-            Logger.getLogger(PatientInfos_Frame.class.getName()).log(Level.SEVERE, null, ex);
+        if (clickNb == 1) {
+            selectedProfession = jList.getSelectedValue();
+            try {
+                // TODO add your handling code here:
+                Doctor.populateContactList2();
+            } catch (Exception ex) {
+                Logger.getLogger(PatientInfos_Frame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            Doctor.doctorsNameArray.stream().forEach((name) -> {
+                defaultListModel.addElement(name);
+            });
+            jList.setModel(defaultListModel);
+            jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         }
-        Doctor.doctorsNameArray.stream().forEach((name) -> {
-            defaultListModel.addElement(name);
-        });
-        jList.setModel(defaultListModel);
-        jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        if (clickNb == 2) {
+            selectedDoctorName = jList.getSelectedValue();
+            //clear jList content
+            DefaultListModel listModel = (DefaultListModel) jList.getModel();
+            listModel.removeAllElements();
+            try {
+                // TODO add your handling code here:
+                Doctor.populateContactList3();
+            } catch (Exception ex) {
+                Logger.getLogger(PatientInfos_Frame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            Doctor.doctorsFreeCalendarArray.stream().forEach((freeCalendar) -> {
+                defaultListModel.addElement(freeCalendar);
+            });
+            jList.setModel(defaultListModel);
+            jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
         }
-        if(clickNb==2){
-         selectedDoctorName=jList.getSelectedValue();
-         //clear jList content
-         DefaultListModel listModel = (DefaultListModel) jList.getModel();
-        listModel.removeAllElements();
-        try {
-            // TODO add your handling code here:
-            Doctor.populateContactList3();
-        } catch (Exception ex) {
-            Logger.getLogger(PatientInfos_Frame.class.getName()).log(Level.SEVERE, null, ex);
+        if (clickNb == 3) {
+            selectedAppointment = jList.getSelectedValue();
+
+            if (appointmentHourTextField.getText().isEmpty()) {
+
+                try {
+                    Patient.getAppointmentDate();
+                } catch (Exception ex) {
+                    Logger.getLogger(PatientInfos_Frame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                myDoctorTextField.setText(selectedDoctorName);
+                appointmentHourTextField.setText(selectedAppointment);
+            } else {
+                final JDialog dialog = new JDialog();
+                dialog.setAlwaysOnTop(true);
+                JOptionPane.showMessageDialog(dialog, "You already have an Appoitment");
+            }
+
         }
-        Doctor.doctorsFreeCalendarArray.stream().forEach((freeCalendar) -> {
-            defaultListModel.addElement(freeCalendar);
-        });
-        jList.setModel(defaultListModel);
-        jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            
-        }
-        if(clickNb==3){
-         selectedAppointment=jList.getSelectedValue();
-         
-        if(appointmentHourTextField.getText().isEmpty()){
-            
-             try {
-                 Patient.getAppointmentDate();
-             } catch (Exception ex) {
-                 Logger.getLogger(PatientInfos_Frame.class.getName()).log(Level.SEVERE, null, ex);
-             }
-             myDoctorTextField.setText(selectedDoctorName);
-             appointmentHourTextField.setText(selectedAppointment);
-        }
-        else{
-              final JDialog dialog = new JDialog();
-            dialog.setAlwaysOnTop(true);
-            JOptionPane.showMessageDialog(dialog,"You already have an Appoitment");
-        }
-            
-        }
-        
+
     }//GEN-LAST:event_nextButtonActionPerformed
 
     private void searchForProfessionTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchForProfessionTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_searchForProfessionTextFieldActionPerformed
-     
-    
+
     /**
      * @param args the command line arguments
      */

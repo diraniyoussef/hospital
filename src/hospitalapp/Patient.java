@@ -107,16 +107,16 @@ public class Patient extends Person {
             while (rs.next()) {
                 this.appointmentHour = rs.getString("APPOINTMENTHOUR");
             }
-            if(!rs.next()){
-            sqlQuery = "select APPOINTMENTHOUR from " + LocalDataBaseConnection.DbName + ".patient "
-                    + "where " + LocalDataBaseConnection.DbName + ".patient.PHONENB=?";
-            pstmt = LocalDataBaseConnection.connection.prepareStatement(sqlQuery);
-            pstmt.setInt(1, Login.id);
-             rs = pstmt.executeQuery();
-            //step4:extract data from result set;
-            while (rs.next()) {
-                this.appointmentHour = rs.getString("APPOINTMENTHOUR");
-            }
+            if (!rs.next()) {
+                sqlQuery = "select APPOINTMENTHOUR from " + LocalDataBaseConnection.DbName + ".patient "
+                        + "where " + LocalDataBaseConnection.DbName + ".patient.PHONENB=?";
+                pstmt = LocalDataBaseConnection.connection.prepareStatement(sqlQuery);
+                pstmt.setInt(1, Login.id);
+                rs = pstmt.executeQuery();
+                //step4:extract data from result set;
+                while (rs.next()) {
+                    this.appointmentHour = rs.getString("APPOINTMENTHOUR");
+                }
             }
             rs.close();
         } catch (SQLException se) {
@@ -150,19 +150,19 @@ public class Patient extends Person {
                 this.operationHour = rs.getString("OPERATIONHOUR");
                 this.myDoctor = rs.getString("MYDOCTOR");
             }
-            if(!rs.next()){
-              sqlQuery = "select OPERATIONNAME,OPERATIONHOUR,MYDOCTOR "
-                    + "from " + LocalDataBaseConnection.DbName + ".patient "
-                    + "where " + LocalDataBaseConnection.DbName + ".patient.PHONENB=?";
-             pstmt = LocalDataBaseConnection.connection.prepareStatement(sqlQuery);
-            pstmt.setInt(1, Login.id);
-             rs = pstmt.executeQuery();
-            //step4:extract data from result set;
-            while (rs.next()) {
-                this.operationName = rs.getString("OPERATIONNAME");
-                this.operationHour = rs.getString("OPERATIONHOUR");
-                this.myDoctor = rs.getString("MYDOCTOR");
-            }
+            if (!rs.next()) {
+                sqlQuery = "select OPERATIONNAME,OPERATIONHOUR,MYDOCTOR "
+                        + "from " + LocalDataBaseConnection.DbName + ".patient "
+                        + "where " + LocalDataBaseConnection.DbName + ".patient.PHONENB=?";
+                pstmt = LocalDataBaseConnection.connection.prepareStatement(sqlQuery);
+                pstmt.setInt(1, Login.id);
+                rs = pstmt.executeQuery();
+                //step4:extract data from result set;
+                while (rs.next()) {
+                    this.operationName = rs.getString("OPERATIONNAME");
+                    this.operationHour = rs.getString("OPERATIONHOUR");
+                    this.myDoctor = rs.getString("MYDOCTOR");
+                }
             }
             rs.close();
         } catch (SQLException se) {

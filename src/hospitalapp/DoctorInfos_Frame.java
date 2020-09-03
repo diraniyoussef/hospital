@@ -23,34 +23,35 @@ public class DoctorInfos_Frame extends javax.swing.JFrame {
         addRowsToScheduleTable();
     }
 
-    
-    public void addRowsToStockTable(){
-        
-        DefaultTableModel model=(DefaultTableModel) stockTable.getModel();
+    public void addRowsToStockTable() {
+
+        DefaultTableModel model = (DefaultTableModel) stockTable.getModel();
         Object rowData[] = new Object[3];
-        for(int i=0; i<Stock.stockArray.size();i++){
-            rowData[0]=Stock.stockArray.get(i).getProductName();
-            rowData[1]=Stock.stockArray.get(i).getNbOfProductLeft();
-            rowData[2]=Stock.stockArray.get(i).getExpDate();
+        for (int i = 0; i < Stock.stockArray.size(); i++) {
+            rowData[0] = Stock.stockArray.get(i).getProductName();
+            rowData[1] = Stock.stockArray.get(i).getNbOfProductLeft();
+            rowData[2] = Stock.stockArray.get(i).getExpDate();
             model.addRow(rowData);
         }
-        
+
     }
-    public void addRowsToScheduleTable(){
-        DefaultTableModel model=(DefaultTableModel) scheduleTable.getModel();
+
+    public void addRowsToScheduleTable() {
+        DefaultTableModel model = (DefaultTableModel) scheduleTable.getModel();
         Object rowData[] = new Object[7];
-        for(int i=0; i<Patient.patientsArray.size();i++){
-            rowData[0]=Patient.patientsArray.get(i).getName();
-            rowData[1]=Patient.patientsArray.get(i).getFamilyName();
-            rowData[2]=Patient.patientsArray.get(i).getBloodType();
-            rowData[3]=Patient.patientsArray.get(i).getAppointmentHour();
-            rowData[4]=Patient.patientsArray.get(i).getOperationHour();
-            rowData[5]=Patient.patientsArray.get(i).getOperationName();
-           rowData[6]=Patient.patientsArray.get(i).getPhoneNb();
+        for (int i = 0; i < Patient.patientsArray.size(); i++) {
+            rowData[0] = Patient.patientsArray.get(i).getName();
+            rowData[1] = Patient.patientsArray.get(i).getFamilyName();
+            rowData[2] = Patient.patientsArray.get(i).getBloodType();
+            rowData[3] = Patient.patientsArray.get(i).getAppointmentHour();
+            rowData[4] = Patient.patientsArray.get(i).getOperationHour();
+            rowData[5] = Patient.patientsArray.get(i).getOperationName();
+            rowData[6] = Patient.patientsArray.get(i).getPhoneNb();
             model.addRow(rowData);
         }
-        
+
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -165,7 +166,7 @@ public class DoctorInfos_Frame extends javax.swing.JFrame {
                 new DoctorInfos_Frame().setVisible(true);
             }
         });
-       
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

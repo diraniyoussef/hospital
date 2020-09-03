@@ -23,6 +23,7 @@ public class Login extends javax.swing.JFrame {
      */
     static int id;
     static String password;
+
     public Login() {
         initComponents();
         setLocationRelativeTo(null);
@@ -157,57 +158,54 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
-            
-           id=Integer.parseInt(idTextField.getText());
-            password=passWord.getText();
-            if(!password.equals(LocalDataBaseConnection.adminPass)){
-        try {
-            LocalDataBaseConnection.hashingPass();
-        } catch (Exception ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+
+        id = Integer.parseInt(idTextField.getText());
+        password = passWord.getText();
+        if (!password.equals(LocalDataBaseConnection.adminPass)) {
+            try {
+                LocalDataBaseConnection.hashingPass();
+            } catch (Exception ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-       }
-            if(!LocalDataBaseConnection.verifyAccount()){
+        if (!LocalDataBaseConnection.verifyAccount()) {
             final JDialog dialog = new JDialog();
-           dialog.setAlwaysOnTop(true);
-            JOptionPane.showMessageDialog(dialog,"WRONG ID or Password");
+            dialog.setAlwaysOnTop(true);
+            JOptionPane.showMessageDialog(dialog, "WRONG ID or Password");
+        } else {
+            if (id > 200) {
+                Patient patient = new Patient();
+                patient.viewAppointments();
+                new PatientInfos_Frame().setVisible(true);
+                PatientInfos_Frame.appointmentHourTextField.setText(patient.getAppointmentHour());
+                patient.viewOperationInfo();
+                PatientInfos_Frame.myDoctorTextField.setText(patient.getMyDoctor());
+                PatientInfos_Frame.operationNameTextField.setText(patient.getOperationName());
+                PatientInfos_Frame.operationHourTextField.setText(patient.getOperationHour());
+                try {
+                    Doctor.populateContactList();
+                } catch (Exception ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+
+                try {
+                    Stock.populateStockArray();
+                    Patient.populatePatientArray();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                new DoctorInfos_Frame().setVisible(true);
+
             }
-            
-            else{
-                   if(id>200){
-                          Patient patient=new Patient();
-                          patient.viewAppointments();
-                          new PatientInfos_Frame().setVisible(true);
-                          PatientInfos_Frame.appointmentHourTextField.setText(patient.getAppointmentHour());
-                          patient.viewOperationInfo();
-                           PatientInfos_Frame.myDoctorTextField.setText(patient.getMyDoctor());
-                            PatientInfos_Frame.operationNameTextField.setText(patient.getOperationName());
-                             PatientInfos_Frame.operationHourTextField.setText(patient.getOperationHour());
-                       try {
-                           Doctor.populateContactList();
-                       }  catch (Exception ex) {
-                           Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                       }
-                       }
-                   else{
-                             
-                       try {
-                           Stock.populateStockArray();
-                           Patient.populatePatientArray();
-                       } catch (SQLException ex) {
-                           Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                       }
-                       new DoctorInfos_Frame().setVisible(true);
-                         
-                   }
-            }
+        }
         setVisible(false);
-            
+
     }//GEN-LAST:event_LoginButtonActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        passWord.setEchoChar((char)0);
+        passWord.setEchoChar((char) 0);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void passWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passWordActionPerformed
@@ -224,12 +222,12 @@ public class Login extends javax.swing.JFrame {
     private void newAccButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newAccButtonActionPerformed
         // TODO add your handling code here:
         final JDialog dialog = new JDialog();
-           dialog.setAlwaysOnTop(true);
-            JOptionPane.showMessageDialog(dialog,"Please choose an ID greater than:"
-                                                 +Collections.max(LocalDataBaseConnection.accountsById.keySet()));
-            setVisible(false);
-            new CreateAccount().setVisible(true);
-            Person.populateCodeList();
+        dialog.setAlwaysOnTop(true);
+        JOptionPane.showMessageDialog(dialog, "Please choose an ID greater than:"
+                + Collections.max(LocalDataBaseConnection.accountsById.keySet()));
+        setVisible(false);
+        new CreateAccount().setVisible(true);
+        Person.populateCodeList();
     }//GEN-LAST:event_newAccButtonActionPerformed
 
     /**

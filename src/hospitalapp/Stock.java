@@ -15,65 +15,63 @@ import java.util.ArrayList;
  * @author patri
  */
 public class Stock {
-            
-        private String productName;
-        private String expDate;
-        private int nbOfProductLeft;
-        
-        public String getProductName() {
-            return productName;
-        }
 
-        public String getExpDate() {
-            return expDate;
-        }
+    private String productName;
+    private String expDate;
+    private int nbOfProductLeft;
 
-        public int getNbOfProductLeft() {
-            return nbOfProductLeft;
-        }
+    public String getProductName() {
+        return productName;
+    }
 
-        public void setProductName(String productName) {
-            this.productName = productName;
-        }
+    public String getExpDate() {
+        return expDate;
+    }
 
-        public void setExpDate(String expDate) {
-            this.expDate = expDate;
-        }
+    public int getNbOfProductLeft() {
+        return nbOfProductLeft;
+    }
 
-        public void setNbOfProductLeft(int nbOfProductLeft) {
-            this.nbOfProductLeft = nbOfProductLeft;
-        }
-        
-        static ArrayList<Stock> stockArray=new ArrayList<>();
-        
-        public static void populateStockArray() throws SQLException{
-            Statement stmt=null;
-        try{
-             
-        //step3:execute a query
-        stmt=LocalDataBaseConnection.connection.createStatement();
-        String sqlQuery="select * from " + LocalDataBaseConnection.DbName + ".stock";
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
 
-        ResultSet rs=stmt.executeQuery(sqlQuery);
-        //step4:extract data from result set;
-        while(rs.next()){
-                Stock s =new Stock();
+    public void setExpDate(String expDate) {
+        this.expDate = expDate;
+    }
+
+    public void setNbOfProductLeft(int nbOfProductLeft) {
+        this.nbOfProductLeft = nbOfProductLeft;
+    }
+
+    static ArrayList<Stock> stockArray = new ArrayList<>();
+
+    public static void populateStockArray() throws SQLException {
+        Statement stmt = null;
+        try {
+
+            //step3:execute a query
+            stmt = LocalDataBaseConnection.connection.createStatement();
+            String sqlQuery = "select * from " + LocalDataBaseConnection.DbName + ".stock";
+
+            ResultSet rs = stmt.executeQuery(sqlQuery);
+            //step4:extract data from result set;
+            while (rs.next()) {
+                Stock s = new Stock();
                 s.setProductName(rs.getString("PRODUCTNAME"));
                 s.setNbOfProductLeft(rs.getInt("NBOFPRODUCTLEFT"));
                 s.setExpDate(rs.getString("EXPDATE"));
                 stockArray.add(s);
-              }
-             
-          rs.close();
-        }
-        catch(SQLException se){
+            }
+
+            rs.close();
+        } catch (SQLException se) {
             se.printStackTrace();
-        }
-        finally{
-            if(stmt!=null){
+        } finally {
+            if (stmt != null) {
                 stmt.close();
             }
         }
-      }
-        
+    }
+
 }

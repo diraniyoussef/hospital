@@ -27,36 +27,38 @@ public class CreateAccount extends javax.swing.JFrame {
      * Creates new form Login
      */
     static String code;
-    
+
     public CreateAccount() {
         initComponents();
         setLocationRelativeTo(null);
-       this.bindData();
+        this.bindData();
 
     }
-DefaultListModel defaultListModel=new DefaultListModel();
-   private void bindData(){
-       //foreach with functinal operation
+    DefaultListModel defaultListModel = new DefaultListModel();
+
+    private void bindData() {
+        //foreach with functinal operation
         Person.country2phone.stream().forEach((Contact) -> {
             defaultListModel.addElement(Contact);
         });
         codeList.setModel(defaultListModel);
         codeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-   }
-   private void searchFilter(String searchTerm)
-    {
-        DefaultListModel filteredItems=new DefaultListModel();
+    }
+
+    private void searchFilter(String searchTerm) {
+        DefaultListModel filteredItems = new DefaultListModel();
 
         Person.country2phone.stream().forEach((Contact) -> {
-            String starName=Contact.toString().toLowerCase();
+            String starName = Contact.toString().toLowerCase();
             if (starName.contains(searchTerm.toLowerCase())) {
                 filteredItems.addElement(Contact);
             }
         });
-        defaultListModel=filteredItems;
+        defaultListModel = filteredItems;
         codeList.setModel(defaultListModel);
 
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -257,44 +259,44 @@ DefaultListModel defaultListModel=new DefaultListModel();
     }// </editor-fold>//GEN-END:initComponents
 
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
-            
-            Patient patient=new Patient();
-            if(idTextField.getText().isEmpty() || nameTextField.getText().isEmpty() 
-            || familyNameTextField.getText().isEmpty() || searchTextField.getText().isEmpty() 
-            || phoneNbTextField.getText().isEmpty() || passWord.getText().isEmpty())  {
+
+        Patient patient = new Patient();
+        if (idTextField.getText().isEmpty() || nameTextField.getText().isEmpty()
+                || familyNameTextField.getText().isEmpty() || searchTextField.getText().isEmpty()
+                || phoneNbTextField.getText().isEmpty() || passWord.getText().isEmpty()) {
             final JDialog dialog = new JDialog();
             dialog.setAlwaysOnTop(true);
-            JOptionPane.showMessageDialog(dialog,"Please enter all fields");
-            }
-            
-            patient.setId(Integer.parseInt(idTextField.getText()));
-            patient.setName(nameTextField.getText());
-            patient.setFamilyName(familyNameTextField.getText());
-            patient.setBloodType(bloodTypeTextField1.getText());
-            patient.setPhoneNb("("+code+") "+phoneNbTextField.getText());
-            patient.setPassword(passWord.getText());
-            if(patient.getId()<Collections.max(LocalDataBaseConnection.accountsById.keySet())){
+            JOptionPane.showMessageDialog(dialog, "Please enter all fields");
+        }
+
+        patient.setId(Integer.parseInt(idTextField.getText()));
+        patient.setName(nameTextField.getText());
+        patient.setFamilyName(familyNameTextField.getText());
+        patient.setBloodType(bloodTypeTextField1.getText());
+        patient.setPhoneNb("(" + code + ") " + phoneNbTextField.getText());
+        patient.setPassword(passWord.getText());
+        if (patient.getId() < Collections.max(LocalDataBaseConnection.accountsById.keySet())) {
             final JDialog dialog = new JDialog();
-           dialog.setAlwaysOnTop(true);
-            patient.setId(Integer.parseInt(JOptionPane.showInputDialog(dialog,"The ID is already taken."
-                    + "Please choose an ID greater than:"+Collections.max(LocalDataBaseConnection.accountsById.keySet()))));
+            dialog.setAlwaysOnTop(true);
+            patient.setId(Integer.parseInt(JOptionPane.showInputDialog(dialog, "The ID is already taken."
+                    + "Please choose an ID greater than:" + Collections.max(LocalDataBaseConnection.accountsById.keySet()))));
             idTextField.setText(Integer.toString(patient.getId()));
-            }
-            
-                  Statement stmt=null;
-                  try{
-             
-        //step3:execute a query
-                if(!(idTextField.getText().isEmpty() || nameTextField.getText().isEmpty() 
-            || familyNameTextField.getText().isEmpty() || searchTextField.getText().isEmpty() 
-            || phoneNbTextField.getText().isEmpty() || passWord.getText().isEmpty())) {
-                    
-                stmt=LocalDataBaseConnection.connection.createStatement();
-                String sqlQuery="Insert into " + LocalDataBaseConnection.DbName + ".patient "
-                + "(ID,NAME,FAMILYNAME,BLOODTYPE,MYROOM,PHONENB,PASSWORD) "
-                + "values (?,?,?,?,?,?,?)";
-                
-                PreparedStatement pstmt=LocalDataBaseConnection.connection.prepareStatement(sqlQuery);
+        }
+
+        Statement stmt = null;
+        try {
+
+            //step3:execute a query
+            if (!(idTextField.getText().isEmpty() || nameTextField.getText().isEmpty()
+                    || familyNameTextField.getText().isEmpty() || searchTextField.getText().isEmpty()
+                    || phoneNbTextField.getText().isEmpty() || passWord.getText().isEmpty())) {
+
+                stmt = LocalDataBaseConnection.connection.createStatement();
+                String sqlQuery = "Insert into " + LocalDataBaseConnection.DbName + ".patient "
+                        + "(ID,NAME,FAMILYNAME,BLOODTYPE,MYROOM,PHONENB,PASSWORD) "
+                        + "values (?,?,?,?,?,?,?)";
+
+                PreparedStatement pstmt = LocalDataBaseConnection.connection.prepareStatement(sqlQuery);
                 pstmt.setInt(1, patient.getId());
                 pstmt.setString(2, patient.getName());
                 pstmt.setString(3, patient.getFamilyName());
@@ -303,37 +305,34 @@ DefaultListModel defaultListModel=new DefaultListModel();
                 pstmt.setString(6, patient.getPhoneNb());
                 pstmt.setString(7, patient.getPassword());
                 pstmt.executeUpdate();
-                     }
-                  }
-                catch(SQLException se){
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException se) {
                 se.printStackTrace();
-                        }
-                finally{
-                  try{
-                       if(stmt!=null){
-                                       stmt.close();
-                               }
-                       }
-                catch(SQLException se){
-                            se.printStackTrace();
-                          }
-                 }
-                 setVisible(false);
-              new PatientInfos_Frame().setVisible(true);
-              patient.viewOperationInfo();
-                           PatientInfos_Frame.myDoctorTextField.setText(patient.getMyDoctor());
-                            PatientInfos_Frame.operationNameTextField.setText(patient.getOperationName());
-                             PatientInfos_Frame.operationHourTextField.setText(patient.getOperationHour());
-                       try {
-                           Doctor.populateContactList();
-                       }  catch (Exception ex) {
-                           Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                       }
+            }
+        }
+        setVisible(false);
+        new PatientInfos_Frame().setVisible(true);
+        patient.viewOperationInfo();
+        PatientInfos_Frame.myDoctorTextField.setText(patient.getMyDoctor());
+        PatientInfos_Frame.operationNameTextField.setText(patient.getOperationName());
+        PatientInfos_Frame.operationHourTextField.setText(patient.getOperationHour());
+        try {
+            Doctor.populateContactList();
+        } catch (Exception ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_createButtonActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        passWord.setEchoChar((char)0);
+        passWord.setEchoChar((char) 0);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void passWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passWordActionPerformed
@@ -353,13 +352,13 @@ DefaultListModel defaultListModel=new DefaultListModel();
 
     private void searchTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextFieldKeyReleased
         // TODO add your handling code here:
-      searchFilter(searchTextField.getText());
+        searchFilter(searchTextField.getText());
     }//GEN-LAST:event_searchTextFieldKeyReleased
 
     private void codeListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_codeListMouseClicked
         // TODO add your handling code here:
-        if(codeList.getSelectedValue()!=null){
-            code=Person.getCode();
+        if (codeList.getSelectedValue() != null) {
+            code = Person.getCode();
         }
     }//GEN-LAST:event_codeListMouseClicked
 
