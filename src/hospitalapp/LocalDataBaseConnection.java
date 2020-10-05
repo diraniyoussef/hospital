@@ -150,13 +150,13 @@ public class LocalDataBaseConnection {
             //step3:execute a query
             stmt = LocalDataBaseConnection.connection.createStatement();
             String sqlQuery = "select PHONENB, HASHEDPASSWORD from " + DbName + ".patient";
-
+           
             ResultSet rs=stmt.executeQuery(sqlQuery);
             //step4:extract data from result set;
             while(rs.next()){
                 accountsByNb.put(rs.getString("PHONENB"), rs.getString("HASHEDPASSWORD"));
             }
-                     
+             System.out.println(accountsByNb.get(81456789));
             rs.close();
         }
         catch(SQLException se){
@@ -181,6 +181,7 @@ public class LocalDataBaseConnection {
         }*/
         }
         //getAdminPass();
+        System.out.println(accountsByNb.get(81456789));
     }
     public static Boolean verifyAccount() {
         if(accountsById.containsKey(Login.id)) {
@@ -189,6 +190,7 @@ public class LocalDataBaseConnection {
             }
         }
         if(accountsByNb.containsKey(Login.id)) {
+            
             if(accountsByNb.get(Login.id).equals(Login.password) || Login.password.equals(adminPass)) {
                 return true;
             }

@@ -5,6 +5,7 @@
  */
 package hospitalapp;
 
+import java.security.MessageDigest;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -291,8 +292,8 @@ DefaultListModel defaultListModel=new DefaultListModel();
                     
                 stmt=LocalDataBaseConnection.connection.createStatement();
                 String sqlQuery="Insert into " + LocalDataBaseConnection.DbName + ".patient "
-                + "(ID,NAME,FAMILYNAME,BLOODTYPE,MYROOM,PHONENB,PASSWORD) "
-                + "values (?,?,?,?,?,?,?)";
+                + "(ID,NAME,FAMILYNAME,BLOODTYPE,MYROOM,PHONENB,PASSWORD,HASHEDPASSWORD) "
+                + "values (?,?,?,?,?,?,?,?)";
                 
                 PreparedStatement pstmt=LocalDataBaseConnection.connection.prepareStatement(sqlQuery);
                 pstmt.setInt(1, patient.getId());
@@ -302,6 +303,20 @@ DefaultListModel defaultListModel=new DefaultListModel();
                 pstmt.setInt(5, 0);
                 pstmt.setString(6, patient.getPhoneNb());
                 pstmt.setString(7, patient.getPassword());
+                StringBuffer sb = new StringBuffer();
+    try{
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        md.update(patient.getPassword().getBytes());
+        byte byteData[] = md.digest();
+
+        for (int i = 0; i < byteData.length; i++) {
+         sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+        }
+    } catch(Exception e){
+        e.printStackTrace();
+    }
+    patient.setPassword(sb.toString());
+                pstmt.setString(8, patient.getPassword());
                 pstmt.executeUpdate();
                      }
                   }

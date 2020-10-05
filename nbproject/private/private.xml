@@ -2,14 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/patri/Desktop/OOP/hospital/src/hospitalapp/Patient.java</file>
-            <file>file:/C:/Users/patri/Desktop/OOP/hospital/src/hospitalapp/LocalDataBaseConnection.java</file>
-            <file>file:/C:/Users/patri/Desktop/OOP/hospital/src/hospitalapp/Doctor.java</file>
-            <file>file:/C:/Users/patri/Desktop/OOP/hospital/src/hospitalapp/Login.java</file>
-            <file>file:/C:/Users/patri/Desktop/OOP/hospital/src/hospitalapp/HospitalApp.java</file>
-            <file>file:/C:/Users/patri/Desktop/OOP/hospital/src/hospitalapp/CreateAccount.java</file>
-            <file>file:/C:/Users/patri/Desktop/OOP/hospital/src/hospitalapp/Person.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
